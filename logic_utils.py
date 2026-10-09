@@ -1,6 +1,13 @@
 def get_range_for_difficulty(difficulty: str):
+    # FIX: Hard mode was 1-50 (easier than Normal). Changed to 1-200. Claude Code proposed it, I reviewed the diff.
     """Return (low, high) inclusive range for a given difficulty."""
-    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+    if difficulty == "Easy":
+        return 1, 20
+    if difficulty == "Normal":
+        return 1, 100
+    if difficulty == "Hard":
+        return 1, 200
+    return 1, 100
 
 
 def parse_guess(raw: str):

@@ -1,4 +1,4 @@
-from logic_utils import check_guess
+from logic_utils import check_guess, get_range_for_difficulty
 
 def test_winning_guess():
     # If the secret is 50 and guess is 50, it should be a win
@@ -34,3 +34,9 @@ def test_check_guess_both_ints():
     assert outcome == "Too High"
     outcome, _ = check_guess(25, 50)
     assert outcome == "Too Low"
+
+def test_hard_mode_harder_than_normal():
+    # Bug 3: Hard mode range was 1-50, easier than Normal's 1-100
+    _, hard_high = get_range_for_difficulty("Hard")
+    _, normal_high = get_range_for_difficulty("Normal")
+    assert hard_high > normal_high
