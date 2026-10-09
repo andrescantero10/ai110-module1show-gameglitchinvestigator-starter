@@ -22,30 +22,28 @@ The game looked like a normal number guessing game at first, but once I started 
 
 ## 2. How did you use AI as a teammate?
 
-- Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?
-- Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
-- Give one example of an AI suggestion you did not accept as written (including what the AI suggested, why you rejected or changed it, and how you verified your version). It does not have to be a suggestion that was wrong: over-engineered, out of scope, harder to read, or a poor fit for this codebase all count.
+I used Claude Code for this project. One correct suggestion it made was that the hint messages in check_guess were backwards. It pointed to lines 37-40 where "Too High" returned "Go HIGHER!" and explained that the messages needed to be flipped. I verified this by playing the game after the fix and seeing that guessing above the secret now correctly says "Go LOWER."
+
+One suggestion that was correct but felt like a big jump was when Claude Code proposed fixing Bugs 1 and 2 together in the same commit, moving check_guess to logic_utils.py while also removing the string conversion code. Both changes were right, but it was a lot to review at once. I checked every line of the diff before approving it and then played the game on both odd and even attempts to make sure it all worked.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
-- How did you decide whether a bug was really fixed?
-- Describe at least one test you ran (manual or using pytest)  
-  and what it showed you about your code.
-- Did AI help you design or understand any tests? How?
+I decided a bug was fixed by going back and playing the game myself, not just trusting the tests. After each fix I would restart the app and try the exact inputs that were broken before. For example, after fixing the hints I guessed a number above the secret and confirmed it now said "Go LOWER" instead of "Go HIGHER."
+
+Claude Code also wrote pytest tests that targeted each specific bug, like checking that check_guess(60, 50) returns "Too High" with "LOWER" in the message. Running pytest after every change made sure I didn't break anything while fixing something else. Claude Code designed the tests and I reviewed them to make sure they were actually testing the right thing.
 
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+I hadn't used Streamlit before this project. The main thing I learned is that every time you click a button, Streamlit reruns the entire script from top to bottom. Without session_state, everything would reset on every click, so the secret number would change, the score would go back to zero, and you could never finish a game. That's why the code uses checks like "if secret not in st.session_state" to only set values the first time. I also noticed that the submit button only works when you click it, not when you press enter, which is just how Streamlit works.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-- What is one habit or strategy from this project that you want to reuse in future labs or projects?
-  - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI generated code.
+The habit I want to reuse is testing the app manually by pushing it to its limits before looking at the code. I started by putting in numbers way outside the range like 300 and -5, and that immediately showed me things were broken. That approach of trying to break it first is something I'll keep doing.
+
+Next time I work with AI on code, I would still review every diff carefully before applying it. The bugs in this project were all simple mistakes, and that taught me that AI-generated code can look fine at first glance but have small logic errors that only show up when you actually use it. You have to test it yourself.
