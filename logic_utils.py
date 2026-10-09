@@ -10,7 +10,8 @@ def get_range_for_difficulty(difficulty: str):
     return 1, 100
 
 
-def parse_guess(raw: str):
+def parse_guess(raw: str, low: int = 1, high: int = 100):
+    # FIX: added range validation to reject out-of-bounds guesses. Claude Code proposed it, I reviewed the diff.
     """
     Parse user input into an int guess.
 
@@ -29,6 +30,9 @@ def parse_guess(raw: str):
             value = int(raw)
     except Exception:
         return False, None, "That is not a number."
+
+    if value < low or value > high:
+        return False, None, f"Out of range. Guess between {low} and {high}."
 
     return True, value, None
 

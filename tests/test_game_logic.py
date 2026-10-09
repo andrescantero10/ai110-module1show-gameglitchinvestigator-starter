@@ -1,4 +1,4 @@
-from logic_utils import check_guess, get_range_for_difficulty, update_score
+from logic_utils import check_guess, get_range_for_difficulty, update_score, parse_guess
 
 def test_winning_guess():
     # If the secret is 50 and guess is 50, it should be a win
@@ -52,3 +52,23 @@ def test_too_high_always_loses_points():
     assert score == 45
     score = update_score(50, "Too High", 3)
     assert score == 45
+
+# --- Edge-case tests ---
+
+def test_negative_number_rejected():
+    # Negative numbers are outside the valid range and should be rejected
+    ok, value, err = parse_guess("-5", 1, 100)
+    assert ok is False
+    assert "Out of range" in err
+
+def test_huge_number_rejected():
+    # Numbers way above the range should be rejected
+    ok, value, err = parse_guess("99999999", 1, 100)
+    assert ok is False
+    assert "Out of range" in err
+
+def test_non_numeric_string_rejected():
+    # Letters and words should be rejected as not a number
+    ok, value, err = parse_guess("abc", 1, 100)
+    assert ok is False
+    assert "not a number" in err

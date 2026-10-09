@@ -28,9 +28,9 @@
 
 | Edge Case | Prompt Used | AI-Suggested Test | Did It Pass? | Your Reasoning |
 |-----------|-------------|-------------------|--------------|----------------|
-| | | | | |
-| | | | | |
-| | | | | |
+| Negative number (-5) | "I noticed negative numbers don't get rejected" | test_negative_number_rejected: parse_guess("-5", 1, 100) should return ok=False with "Out of range" | Yes | The game range starts at 1, so negative numbers should not be accepted as valid guesses |
+| Huge number (99999999) | "Find edge-case inputs that might still break the game" | test_huge_number_rejected: parse_guess("99999999", 1, 100) should return ok=False with "Out of range" | Yes | Numbers way above the range waste a turn and give misleading hints instead of telling the player to stay in bounds |
+| Non-numeric string ("abc") | "Find edge-case inputs that might still break the game" | test_non_numeric_string_rejected: parse_guess("abc", 1, 100) should return ok=False with "not a number" | Yes | Letters and words should be caught before they reach the comparison logic |
 
 ---
 
