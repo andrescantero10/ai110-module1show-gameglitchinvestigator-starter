@@ -68,7 +68,8 @@ if "secret" not in st.session_state:
     st.session_state.secret = random.randint(low, high)
 
 if "attempts" not in st.session_state:
-    st.session_state.attempts = 1
+    # FIX: attempts started at 1, costing the player one turn. Claude Code proposed it, I reviewed the diff.
+    st.session_state.attempts = 0
 
 if "score" not in st.session_state:
     st.session_state.score = 0
