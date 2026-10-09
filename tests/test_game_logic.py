@@ -1,4 +1,4 @@
-from logic_utils import check_guess, get_range_for_difficulty
+from logic_utils import check_guess, get_range_for_difficulty, update_score
 
 def test_winning_guess():
     # If the secret is 50 and guess is 50, it should be a win
@@ -40,3 +40,15 @@ def test_hard_mode_harder_than_normal():
     _, hard_high = get_range_for_difficulty("Hard")
     _, normal_high = get_range_for_difficulty("Normal")
     assert hard_high > normal_high
+
+def test_win_on_first_attempt_score():
+    # Bug 5: formula used (attempt_number + 1), giving 80 instead of 90
+    score = update_score(0, "Win", 1)
+    assert score == 90
+
+def test_too_high_always_loses_points():
+    # Bug 6: "Too High" on even attempts used to gain +5 instead of -5
+    score = update_score(50, "Too High", 2)
+    assert score == 45
+    score = update_score(50, "Too High", 3)
+    assert score == 45

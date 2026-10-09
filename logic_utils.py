@@ -30,5 +30,13 @@ def check_guess(guess, secret):
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):
+    # FIX: score formula used (attempt_number + 1) causing off-by-one, and "Too High" gained points on even attempts. Claude Code proposed it, I reviewed the diff.
     """Update score based on outcome and attempt number."""
-    raise NotImplementedError("Refactor this function from app.py into logic_utils.py")
+    if outcome == "Win":
+        points = 100 - 10 * attempt_number
+        if points < 10:
+            points = 10
+        return current_score + points
+    if outcome == "Too High" or outcome == "Too Low":
+        return current_score - 5
+    return current_score
